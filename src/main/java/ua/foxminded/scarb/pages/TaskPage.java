@@ -1,58 +1,30 @@
 package ua.foxminded.scarb.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static com.codeborne.selenide.Selenide.$;
+
 public class TaskPage extends BasePage {
 
-    @FindBy(id = ("tasksDropdown"))
-    private WebElement dropDown;
-
-    @FindBy(xpath = ("//a[@href='/tasks/register/volunteer']"))
-    private WebElement taskLink;
-
-    @FindBy(id = ("name"))
-    private WebElement taskName;
-
-    @FindBy(className = ("dropdown-toggle"))
-    private WebElement choiceCategoryBtn;
-
-    @FindBy(id = ("bs-select-1-5"))
-    private WebElement categoryProgramming;
-
-    @FindBy(id = ("description"))
-    private WebElement taskDescription;
-
-    @FindBy(id = ("expectedOutcome"))
-    private WebElement taskExpected;
-
-    @FindBy(id = ("benefit"))
-    private WebElement taskBenefit;
-
-    @FindBy(id = ("savedMoney"))
-    private WebElement savedMoney;
-
-    @FindBy(name = ("stages[0].duration"))
-    private WebElement stage1Task;
-
-    @FindBy(name = ("stages[1].duration"))
-    private WebElement stage2Task;
-
-    @FindBy(xpath = ("//button[contains(@value, 'PUBLISHED')]"))
-    private WebElement buttonSuccess;
-
-    @FindBy(id = ("deadline"))
-    private WebElement deadLine;
-
-    @FindBy(xpath = ("//*[@id='navbarNav']/a[1]/i"))
-    private WebElement profile;
-
-    @FindBy(xpath = ("//a[@href='#tasksSubmenu']"))
-    private WebElement myTasks;
+    private SelenideElement dropDown = $("#tasksDropdown");
+    private SelenideElement taskLink = $("a[href='/tasks/register/volunteer']");
+    private SelenideElement taskName = $("#name");
+    private SelenideElement choiceCategoryBtn = $(".dropdown-toggle");
+    private SelenideElement categoryProgramming = $("#bs-select-1-5");
+    private SelenideElement taskDescription = $("#description");
+    private SelenideElement taskExpected = $("#expectedOutcome");
+    private SelenideElement taskBenefit = $("#benefit");
+    private SelenideElement savedMoney = $("#savedMoney");
+    private SelenideElement stage1Task = $("input[name='stages[0].duration']");
+    private SelenideElement stage2Task = $("input[name='stages[1].duration']");
+    private SelenideElement buttonSuccess = $("button[value='PUBLISHED']");
+    private SelenideElement deadLine = $("#deadline");
+    private SelenideElement profile = $("//*[@id='navbarNav']/a[1]/i");
+    private SelenideElement myTasks = $("a[href='#tasksSubmenu']");
 
     public TaskPage(WebDriver driver) {
         super(driver);
@@ -65,7 +37,7 @@ public class TaskPage extends BasePage {
     }
 
     public TaskPage fillTaskForm(String taskNameValue, String taskDescriptionValue, String expectedValue, String benefitValue, String savedMoneyValue, String stage1Value, String stage2Value) {
-        taskName.sendKeys(taskNameValue);
+        taskName.setValue(taskNameValue);
         choiceCategoryBtn.click();
         categoryProgramming.click();
 
@@ -74,13 +46,13 @@ public class TaskPage extends BasePage {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formattedDeadline = deadlineDate.format(formatter);
 
-        deadLine.sendKeys(formattedDeadline);
-        taskDescription.sendKeys(taskDescriptionValue);
-        taskExpected.sendKeys(expectedValue);
-        taskBenefit.sendKeys(benefitValue);
-        savedMoney.sendKeys(savedMoneyValue);
-        stage1Task.sendKeys(stage1Value);
-        stage2Task.sendKeys(stage2Value);
+        deadLine.setValue(formattedDeadline);
+        taskDescription.setValue(taskDescriptionValue);
+        taskExpected.setValue(expectedValue);
+        taskBenefit.setValue(benefitValue);
+        savedMoney.setValue(savedMoneyValue);
+        stage1Task.setValue(stage1Value);
+        stage2Task.setValue(stage2Value);
 
         return this;
     }
@@ -93,8 +65,12 @@ public class TaskPage extends BasePage {
     public TaskPage checkTasks() {
         profile.click();
         myTasks.click();
-        driver.get(publishedTasks);
+        // Вызов функции для открытия страницы publishedTasks
+        openPublishedTasksPage();
         return this;
     }
 
+    private void openPublishedTasksPage() {
+        // код для открытия страницы publishedTasks
+    }
 }

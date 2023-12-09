@@ -1,54 +1,48 @@
 package ua.foxminded.scarb.test;
 
+
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import utils.RandomDataGenerator;
 import utils.RandomStringGenerator;
 
+import static com.codeborne.selenide.Selenide.*;
+
 public class PartnerPageTestDataGenerator extends BaseTestNG {
+
+    private SelenideElement registrationLink = $(By.xpath("//a[@href='/registration']"));
+    private SelenideElement btnPartner = $(By.xpath("//button[contains(@class, 'btn-success')]"));
+    private SelenideElement email = $(By.xpath("//input[@type='email']"));
+    private SelenideElement companyName = $(By.xpath("//input[@id='organizationName']"));
+    private SelenideElement firstName = $(By.xpath("//input[@name='firstName']"));
+    private SelenideElement lastName = $(By.xpath("//input[@name='lastName']"));
+    private SelenideElement positionName = $(By.xpath("//input[@id='positionInOrganization']"));
+    private SelenideElement sexBox = $(By.xpath("//input[@id='female']"));
+    private SelenideElement password = $(By.cssSelector("input#password"));
+    private SelenideElement confirmPassword = $(By.cssSelector("input#confirmPassword"));
+    private SelenideElement btnSuccess = $(By.xpath("//form//div[3]/button"));
 
     @Test
     public void checkPartnerFormTest() {
-        driver.get(baseUrl);
-        WebElement registrationLink = driver.findElement(By.xpath("//a[@href='/registration']"));
-        registrationLink.click();
-        WebElement btnPartner = driver.findElement(By.xpath("//button[contains(@class, 'btn-success') ]"));
-        btnPartner.click();
-
-        String emailPartnerValue = RandomStringGenerator.generateRandomEmail();
-        WebElement email = driver.findElement(By.xpath("//input[@type='email']"));
-        email.sendKeys(emailPartnerValue);
-
-        String companyNameValue = RandomStringGenerator.generateRandomString();
-        WebElement companyName = driver.findElement(By.xpath("//input[@id='organizationName']"));
-        companyName.sendKeys(companyNameValue);
-
-        String firstNameValue = RandomStringGenerator.generateRandomString();
-        WebElement firstName = driver.findElement(By.xpath("//input[@name='firstName']"));
-        firstName.sendKeys(firstNameValue);
-
-        String lastNameValue = RandomStringGenerator.generateRandomString();
-        WebElement lastName = driver.findElement(By.xpath("//input[@name='lastName']"));
-        lastName.sendKeys(lastNameValue);
-
-        String positionNameValue = RandomStringGenerator.generateRandomString();
-        WebElement positionName = driver.findElement(By.xpath("//input[@id='positionInOrganization']"));
-        positionName.sendKeys(positionNameValue);
-
-        WebElement sexBox = driver.findElement(By.xpath("//input[@id='female']"));
-        sexBox.click();
-
-        String passwordValue = RandomDataGenerator.generateStrongPassword();
-        WebElement password = driver.findElement(By.cssSelector("input#password"));
-        password.sendKeys(passwordValue);
-        WebElement confirmPassword = driver.findElement(By.cssSelector("input#confirmPassword"));
-        confirmPassword.sendKeys(passwordValue);
-
-        WebElement btnSuccess = driver.findElement(By.xpath("//form//div[3]/button"));
-        btnSuccess.click();
+        openRegistrationPage();
+        fillRegistrationForm();
     }
 
+    private void openRegistrationPage() {
+        registrationLink.click();
+        btnPartner.click();
+    }
 
-
+    private void fillRegistrationForm() {
+        email.setValue(RandomStringGenerator.generateRandomEmail());
+        companyName.setValue(RandomStringGenerator.generateRandomString());
+        firstName.setValue(RandomStringGenerator.generateRandomString());
+        lastName.setValue(RandomStringGenerator.generateRandomString());
+        positionName.setValue(RandomStringGenerator.generateRandomString());
+        sexBox.click();
+        password.setValue(RandomDataGenerator.generateStrongPassword());
+        confirmPassword.setValue(password.getValue()); // используем введенный ранее пароль
+        btnSuccess.click();
+    }
 }

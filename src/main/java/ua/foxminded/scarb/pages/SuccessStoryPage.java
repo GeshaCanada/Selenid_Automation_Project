@@ -1,29 +1,23 @@
 package ua.foxminded.scarb.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.Keys;
+
+import static com.codeborne.selenide.Selenide.$;
+
 public class SuccessStoryPage extends BasePage {
 
-    @FindBy(partialLinkText = ("Истории успеха"))
-    private WebElement title;
+    // Используем SelenideElement вместо WebElement
+    private SelenideElement title = $("[partialLinkText='Истории успеха']");
+    private SelenideElement searchInput = $("input[id='storyNameSearchFilter']");
+    private SelenideElement link = $("[partialLinkText='Показать больше']");
+    private SelenideElement homeLink = $("h4.text-dark-red");
 
-    @FindBy(css = ("input[id='storyNameSearchFilter']"))
-    private WebElement searchInput;
-
-    @FindBy(partialLinkText = ("Показать больше"))
-    private WebElement link;
-
-    @FindBy(css = "h4.text-dark-red")
-    private WebElement homeLink;
-
-
-    public SuccessStoryPage (WebDriver driver) {
+    public SuccessStoryPage(WebDriver driver) {
         super(driver);
     }
 
-    public boolean getTitle() {
+    public boolean isTitleDisplayed() {
         return title.isDisplayed();
     }
 
@@ -32,27 +26,26 @@ public class SuccessStoryPage extends BasePage {
     }
 
     public void setSearchQuery(String query) {
-        searchInput.sendKeys(query);
-        searchInput.sendKeys(Keys.RETURN);
+        searchInput.setValue(query).pressEnter();
     }
 
-    public boolean showMoreLinkDisplayed() {
+    public boolean isShowMoreLinkDisplayed() {
         return link.isDisplayed();
     }
-    public boolean showMoreLinkEnabled() {
+
+    public boolean isShowMoreLinkEnabled() {
         return link.isEnabled();
     }
 
-    public void showMoreLinkClick() {
+    public void clickShowMoreLink() {
         link.click();
     }
 
-    public String getHomeLink() {
+    public String getHomeLinkText() {
         return homeLink.getText();
     }
 
-    public void homeLinkClick() {
+    public void clickHomeLink() {
         homeLink.click();
     }
-
 }

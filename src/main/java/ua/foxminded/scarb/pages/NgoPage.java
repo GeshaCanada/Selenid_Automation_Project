@@ -1,28 +1,26 @@
 package ua.foxminded.scarb.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.testng.asserts.SoftAssert;
 import utils.RandomStringGenerator;
-
 import java.util.List;
+import static com.codeborne.selenide.Selenide.$;
 
 
 public class NgoPage extends BasePage {
 
     private static final Logger LOGGER = LogManager.getLogger(NgoPage.class.getName());
-    @FindBy(xpath = ("//a[@href='/registration']"))
-    private WebElement registrationLink;
 
-    @FindBy(xpath = ("//button[contains(@class, 'btn-warning')]"))
-    private WebElement buttonNgo;
+    // Используем SelenideElement вместо WebElement
+    private SelenideElement registrationLink = $(By.xpath("//a[@href='/registration']"));
+    private SelenideElement buttonNgo = $(By.xpath("//button[contains(@class, 'btn-warning')]"));
+    private SelenideElement buttonSuccess = $(".btn-success"); // Пример использования CSS-селектора
 
-    @FindBy(className = ("btn-success"))
-    private WebElement buttonSuccess;
     public NgoPage(WebDriver driver) {
         super(driver);
     }
@@ -70,5 +68,4 @@ public class NgoPage extends BasePage {
         LOGGER.debug("Navigated to Success Page");
         return this;
     }
-
 }

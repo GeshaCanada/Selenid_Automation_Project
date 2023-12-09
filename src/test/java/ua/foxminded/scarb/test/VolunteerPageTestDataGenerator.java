@@ -1,18 +1,18 @@
 package ua.foxminded.scarb.test;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import com.codeborne.selenide.Selenide;
 import org.testng.annotations.Test;
 import utils.RandomDataGenerator;
+
+import static com.codeborne.selenide.Selectors.*;
+import static com.codeborne.selenide.Selenide.*;
 
 public class VolunteerPageTestDataGenerator extends BaseTestNG {
 
     @Test
     public void checkVolunteerFormTest() {
-        WebElement registrationLink = driver.findElement(By.cssSelector(".nav-link.ml-auto"));
-        registrationLink.click();
-        WebElement btn = driver.findElement(By.cssSelector("[name=volunteers] .btn "));
-        btn.click();
+        $(byCssSelector(".nav-link.ml-auto")).click();
+        $(byCssSelector("[name=volunteers] .btn")).click();
 
         String firstNameValue = RandomDataGenerator.generateRandomString();
         String lastNameValue = RandomDataGenerator.generateRandomString();
@@ -20,22 +20,13 @@ public class VolunteerPageTestDataGenerator extends BaseTestNG {
         String phoneValue = RandomDataGenerator.generateRandomNumber();
         String passwordValue = RandomDataGenerator.generateStrongPassword();
 
-        WebElement firstName = driver.findElement(By.id("firstName"));
-        firstName.sendKeys(firstNameValue);
-        WebElement lastName = driver.findElement(By.id("lastName"));
-        lastName.sendKeys(lastNameValue);
-        WebElement email = driver.findElement(By.id("email"));
-        email.sendKeys(emailValue);
-        WebElement phoneNumber = driver.findElement(By.id("phoneNumber"));
-        phoneNumber.sendKeys(phoneValue);
-        WebElement password = driver.findElement(By.id("password"));
-        password.sendKeys(passwordValue);
-        WebElement confirmPassword = driver.findElement(By.id("confirmPassword"));
-        confirmPassword.sendKeys(passwordValue);
+        $("#firstName").setValue(firstNameValue);
+        $("#lastName").setValue(lastNameValue);
+        $("#email").setValue(emailValue);
+        $("#phoneNumber").setValue(phoneValue);
+        $("#password").setValue(passwordValue);
+        $("#confirmPassword").setValue(passwordValue);
 
-        WebElement btnSuccess = driver.findElement(By.className("btn-success"));
-        btnSuccess.click();
-
+        $(".btn-success").click();
     }
 }
-

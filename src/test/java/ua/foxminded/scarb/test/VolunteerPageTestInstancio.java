@@ -1,23 +1,19 @@
 package ua.foxminded.scarb.test;
 
 import org.instancio.Instancio;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import ua.foxminded.scarb.Volunteer;
 import utils.RandomDataGenerator;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selectors.*;
 import static org.instancio.Select.field;
-
 
 public class VolunteerPageTestInstancio extends BaseTestNG {
 
-
     @Test
     public void checkVolunteerFormTest() {
-        WebElement registrationLink = driver.findElement(By.cssSelector(".nav-link.ml-auto"));
-        registrationLink.click();
-        WebElement btn = driver.findElement(By.cssSelector("[name=volunteers] .btn "));
-        btn.click();
+        $(byCssSelector(".nav-link.ml-auto")).click();
+        $(byCssSelector("[name=volunteers] .btn")).click();
 
         Volunteer volunteer = Instancio.of(Volunteer.class)
                 .generate(field(Volunteer::getEmail), gen -> gen.text().pattern("#a#a#a#a#a#a@yahoo.com"))
@@ -27,28 +23,13 @@ public class VolunteerPageTestInstancio extends BaseTestNG {
                 .set(field(Volunteer::getPassword), RandomDataGenerator.generateStrongPassword())
                 .create();
 
-        WebElement email = driver.findElement(By.id("email"));
-        email.sendKeys(volunteer.getEmail());
+        $("#email").setValue(volunteer.getEmail());
+        $("#phoneNumber").setValue(volunteer.getPhoneNumber());
+        $("#firstName").setValue(volunteer.getFirstName());
+        $("#lastName").setValue(volunteer.getLastName());
+        $("#password").setValue(volunteer.getPassword());
+        $("#confirmPassword").setValue(volunteer.getPassword());
 
-        WebElement phoneNumber = driver.findElement(By.id("phoneNumber"));
-        phoneNumber.sendKeys(volunteer.getPhoneNumber());
-
-        WebElement firstName = driver.findElement(By.id("firstName"));
-        firstName.sendKeys(volunteer.getFirstName());
-
-        WebElement lastName = driver.findElement(By.id("lastName"));
-        lastName.sendKeys(volunteer.getLastName());
-
-        WebElement password = driver.findElement(By.id("password"));
-        password.sendKeys(volunteer.getPassword());
-
-        WebElement confirmPassword = driver.findElement(By.id("confirmPassword"));
-        confirmPassword.sendKeys(volunteer.getPassword());
-
-        WebElement btnSuccess = driver.findElement(By.className("btn-success"));
-        btnSuccess.click();
+        $(".btn-success").click();
     }
-
 }
-
-
