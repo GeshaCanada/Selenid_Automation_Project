@@ -1,35 +1,15 @@
 package ua.foxminded.scarb.pages;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import com.codeborne.selenide.SelenideElement;
 
-public class HomePage extends BasePage {
+import static com.codeborne.selenide.Selenide.$;
 
-    @FindBy(css = "h4.text-dark-red")
-    private WebElement title;
+public class HomePage {
 
-    @FindBy(partialLinkText = "Связаться с нами")
-    private WebElement contactUs;
-
-    @FindBy(css = "title.info_title.title--red")
-    private WebElement page;
-
-    public HomePage(WebDriver driver) {
-        super(driver);
-    }
+    private SelenideElement title = $("h4.text-dark-red");
 
     public String getTitleText() {
         return title.getText();
     }
-
-    public void clickContactUs() {
-        contactUs.click();
-    }
-
-    public String getPageText() {
-        return page.getText();
-    }
-
 
 }

@@ -1,48 +1,20 @@
 package ua.foxminded.scarb.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import com.codeborne.selenide.SelenideElement;
 import ua.foxminded.scarb.User;
 
-public class LoginPage extends BasePage {
+import static com.codeborne.selenide.Selenide.$;
 
-    @FindBy(xpath = "//a[@href='/login']")
-    private WebElement loginLink;
+public class LoginPage {
 
-    @FindBy(id = "login")
-    private WebElement loginInput;
-
-    @FindBy(id = "password")
-    private WebElement passwordInput;
-
-    @FindBy(className = "btn-primary")
-    private WebElement loginButton;
-
-    @FindBy(xpath = "//*[@id='navbarNav']/a[1]/i")
-    private WebElement profileIcon;
-
-    @FindBy(id = "positionInOrganization")
-    private WebElement positionInput;
-
-    @FindBy(id = "firstName")
-    private WebElement firstNameInput;
-
-    @FindBy(id = "lastName")
-    private WebElement lastNameInput;
-
-    public LoginPage(WebDriver driver) {
-        super(driver);
-    }
-
-    public LoginPage logIn() {
-        loginLink.click();
-        loginInput.sendKeys("grostikov23@gmail.com");
-        passwordInput.sendKeys("Gg23021981Gg!");
-        loginButton.click();
-        return this;
-    }
+    private SelenideElement loginLink = $("a[href='/login']");
+    private SelenideElement loginInput = $("#login");
+    private SelenideElement passwordInput = $("#password");
+    private SelenideElement loginButton = $(".btn-primary");
+    private SelenideElement profileIcon = $("#navbarNav a i");
+    private SelenideElement positionInput = $("#positionInOrganization");
+    private SelenideElement firstNameInput = $("#firstName");
+    private SelenideElement lastNameInput = $("#lastName");
 
     public LoginPage populateLoginForm(User user) {
         loginLink.click();
@@ -61,4 +33,5 @@ public class LoginPage extends BasePage {
         return this;
     }
 }
+
 

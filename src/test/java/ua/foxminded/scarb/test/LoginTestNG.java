@@ -21,7 +21,7 @@ public class LoginTestNG extends BaseTestNG {
                 .setUsername("Gennadii")
                 .build();
 
-        new LoginPage(driver)
+        new LoginPage()
                 .populateLoginForm(user)
                 .verifyUserInfo(user);
         LOGGER.info("Finish checking userLoginTest");
