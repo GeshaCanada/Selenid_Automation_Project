@@ -1,31 +1,22 @@
 package ua.foxminded.scarb.pages;
 
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.testng.asserts.SoftAssert;
 import utils.RandomStringGenerator;
 
-import java.util.List;
+import static com.codeborne.selenide.Selenide.*;
 
-
-public class NgoPage extends BasePage {
+public class NgoPage {
 
     private static final Logger LOGGER = LogManager.getLogger(NgoPage.class.getName());
-    @FindBy(xpath = ("//a[@href='/registration']"))
-    private WebElement registrationLink;
 
-    @FindBy(xpath = ("//button[contains(@class, 'btn-warning')]"))
-    private WebElement buttonNgo;
-
-    @FindBy(className = ("btn-success"))
-    private WebElement buttonSuccess;
-    public NgoPage(WebDriver driver) {
-        super(driver);
-    }
+    private final SelenideElement registrationLink = $x("//a[@href='/registration']");
+    private final SelenideElement buttonNgo = $x("//button[contains(@class, 'btn-warning')]");
+    private final SelenideElement buttonSuccess = $(".btn-success");
 
     public NgoPage linkToNgoPage() {
         registrationLink.click();
@@ -36,21 +27,19 @@ public class NgoPage extends BasePage {
     public NgoPage setRegistrationNgoForm() {
         SoftAssert softAssert = new SoftAssert();
         String passwordValue = RandomStringGenerator.generateStrongPassword();
-        List<WebElement> inputFields = driver.findElements(By.xpath("//input"));
+        ElementsCollection inputFields = $$("input");
 
-        if (inputFields.size() == 14) {
-            inputFields.get(0).sendKeys(RandomStringGenerator.generateRandomEmail());
-            inputFields.get(2).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(3).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(5).click();
-            inputFields.get(6).sendKeys(passwordValue);
-            inputFields.get(7).sendKeys(passwordValue);
-            inputFields.get(8).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(11).sendKeys(RandomStringGenerator.generateRandomString());
+        inputFields.shouldHave(CollectionCondition.size(14)); // Проверка количества полей
 
-        } else {
-            softAssert.fail("Insufficient input fields found");
-        }
+        inputFields.get(0).sendKeys(RandomStringGenerator.generateRandomEmail());
+        inputFields.get(2).sendKeys(RandomStringGenerator.generateRandomString());
+        inputFields.get(3).sendKeys(RandomStringGenerator.generateRandomString());
+        inputFields.get(5).click();
+        inputFields.get(6).sendKeys(passwordValue);
+        inputFields.get(7).sendKeys(passwordValue);
+        inputFields.get(8).sendKeys(RandomStringGenerator.generateRandomString());
+        inputFields.get(11).sendKeys(RandomStringGenerator.generateRandomString());
+
         softAssert.assertAll();
         buttonSuccess.click();
         return this;
@@ -70,5 +59,4 @@ public class NgoPage extends BasePage {
         LOGGER.debug("Navigated to Success Page");
         return this;
     }
-
 }

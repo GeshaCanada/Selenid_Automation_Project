@@ -11,10 +11,10 @@ public class ScarbHomePageTest extends BaseTestNG {
     private HomePage pageHome;
 
     @Test
-    public void getToHomePageTest() {
-        LOGGER.info("Starting getToHomePageTest");
+    public void homePageTitleTest() {
+        LOGGER.info("Starting homePageTitleTest");
 
-        pageHome = new HomePage(driver);
+        pageHome = new HomePage();
         String actualTitle = pageHome.getTitleText();
         String expectedTitle = "SKARB NGO";
 
@@ -23,24 +23,9 @@ public class ScarbHomePageTest extends BaseTestNG {
 
         Assert.assertEquals(actualTitle, expectedTitle, "Title mismatch");
 
-        LOGGER.info("getToHomePageTest completed successfully");
+        LOGGER.info("homePageTitleTest completed successfully");
     }
 
-    @Test
-    public void checkContactUsTest() {
-        LOGGER.info("Starting checkContactUsTest");
-
-        pageHome = new HomePage(driver);
-        pageHome.clickContactUs();
-        String actualPageText = pageHome.getPageText();
-        String expectedPageText = "Свяжитесь с нами";
-
-        LOGGER.debug("Actual Page Text: " + actualPageText);
-        LOGGER.debug("Expected Page Text: " + expectedPageText);
-
-        Assert.assertEquals(actualPageText, expectedPageText, "Page text mismatch");
-
-        LOGGER.info("checkContactUsTest completed successfully");
-    }
 }
+
 

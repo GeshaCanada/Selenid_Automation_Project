@@ -12,7 +12,7 @@ public class PartnerPageRegistrationTest extends BaseTestNG {
     public void checkPartnerFormAndRegistrationPartnerFormTest() {
         LOGGER.info("Starting checkPartnerFormAndRegistrationPartnerFormTest");
 
-        new PartnerPage(driver)
+        new PartnerPage()
                 .linkToPartnerPage()
                 .setRegistrationForm()
                 .confirmRegistration()

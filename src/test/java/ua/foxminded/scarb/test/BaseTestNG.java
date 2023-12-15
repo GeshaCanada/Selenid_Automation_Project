@@ -1,29 +1,28 @@
 package ua.foxminded.scarb.test;
 
-import org.openqa.selenium.WebDriver;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
 import org.testng.annotations.*;
 import ua.foxminded.scarb.helpers.NotSupportedBrowserException;
-import ua.foxminded.scarb.helpers.WebDriverFactory;
-import java.time.Duration;
 
 public class BaseTestNG {
 
-    protected WebDriver driver;
     protected String baseUrl = "https://skarb.foxminded.ua/";
 
-        @BeforeTest
-        public void setUp () throws NotSupportedBrowserException {
-        driver = WebDriverFactory.create();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(7));
-        driver.get(baseUrl);
-
+    @BeforeMethod
+    public void setUp() throws NotSupportedBrowserException {
+        Configuration.browser = "chrome";
+        configureDriver();
+        Selenide.open(baseUrl);
     }
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        Selenide.closeWebDriver();
+    }
+
+    private void configureDriver() {
+        Configuration.browserSize ="4000x2200";
+        Configuration.timeout = 7000;
     }
 }

@@ -1,39 +1,25 @@
 package ua.foxminded.scarb.pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
+import com.codeborne.selenide.SelenideElement;
 import org.testng.asserts.SoftAssert;
 import utils.RandomStringGenerator;
 
-import java.util.List;
-import java.util.Set;
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
 
-public class PartnerPage extends BasePage {
+public class PartnerPage {
 
-    @FindBy(xpath = ("//a[@href='/registration']"))
-    private WebElement link;
+    protected String emailUrl = "https://skarbmail.foxminded.ua/";
 
-    @FindBy(xpath = ("//button[contains(@class, 'btn-success')]"))
-    private WebElement buttonSuccess;
+    protected String registrationUrl = "https://skarb.foxminded.ua/registration/confirm";
 
-    @FindBy(xpath = ("//form//div[3]/button"))
-    private WebElement buttonRegistration;
-
-    @FindBy(xpath = ("//*[text()='Подтверждение регистрации']//ancestor::span"))
-    private WebElement registrationField;
-
-    @FindBy(xpath = ("//a[contains(@href, 'https://skarb.foxminded.ua/registration/confirm')]"))
-    private WebElement registrationLink;
-
-    @FindBy(xpath = ("//*[contains(text(), 'Ваш email подтверждено')]"))
-    private WebElement confirmationMessage;
-
-    public PartnerPage(WebDriver driver) {
-        super(driver);
-    }
+    private final SelenideElement link = $x("//a[@href='/registration']");
+    private final SelenideElement buttonSuccess = $x("//button[contains(@class, 'btn-success')]");
+    private final SelenideElement buttonRegistration = $x("//form//div[3]/button");
+    private final SelenideElement registrationField = $x("//*[text()='Подтверждение регистрации']//ancestor::span");
+    private final SelenideElement registrationLink = $x("//a[contains(@href, 'https://skarb.foxminded.ua/registration/confirm')]");
+    private final SelenideElement confirmationMessage = $x("//*[contains(text(), 'Ваш email подтверждено')]");
 
     public PartnerPage linkToPartnerPage() {
         link.click();
@@ -44,41 +30,42 @@ public class PartnerPage extends BasePage {
     public PartnerPage setRegistrationForm() {
         SoftAssert softAssert = new SoftAssert();
         String passwordValue = RandomStringGenerator.generateStrongPassword();
-        List<WebElement> inputFields = driver.findElements(By.xpath("//input"));
-        if (inputFields.size() == 13) {
-            inputFields.get(0).sendKeys(RandomStringGenerator.generateRandomEmail());
-            inputFields.get(2).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(3).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(5).click();
-            inputFields.get(6).sendKeys(passwordValue);
-            inputFields.get(7).sendKeys(passwordValue);
-            inputFields.get(8).sendKeys(RandomStringGenerator.generateRandomString());
-            inputFields.get(11).sendKeys(RandomStringGenerator.generateRandomString());
-        } else {
-            softAssert.fail("Insufficient input fields found");
-        }
-        softAssert.assertAll();
+
+
+        $("input[name='email']").setValue(RandomStringGenerator.generateRandomEmail());
+        $("input[name='lastName']").setValue(RandomStringGenerator.generateRandomString());
+        $("input[name='firstName']").setValue(RandomStringGenerator.generateRandomString());
+        $("input[name='sex']").click();
+        $("input[name='password']").setValue(passwordValue);
+        $("input[name='confirmPassword']").setValue(passwordValue);
+        $("input[name='positionInOrganization']").setValue(RandomStringGenerator.generateRandomString());
+        $("input[name='organizationName']").setValue(RandomStringGenerator.generateRandomString());
+
         buttonRegistration.click();
+
+        softAssert.assertAll();
         return this;
     }
 
     public PartnerPage confirmRegistration() {
-        driver.get(emailUrl);
+        open(emailUrl);
         registrationField.click();
         registrationLink.click();
         return this;
     }
 
     public void checkEmailConfirmationMessage() {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            driver.switchTo().window(handle);
-            if (driver.getCurrentUrl().equals(registrationUrl)) {
-                SoftAssert softAssert = new SoftAssert();
-                softAssert.assertNotNull(confirmationMessage, "Email confirmation message not found");
-                softAssert.assertAll();
-            }
-        }
-    }
+        switchTo().window(1);
+        SoftAssert softAssert = new SoftAssert();
 
+        if (url().startsWith(registrationUrl)) {
+            softAssert.assertTrue(confirmationMessage.text().contains("Ваш email подтверждено"),
+                    "Expected email confirmation message not found");
+        } else {
+            softAssert.fail("Expected registration URL not found");
+        }
+
+        softAssert.assertAll();
+    }
 }
+
